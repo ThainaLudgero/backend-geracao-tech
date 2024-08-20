@@ -1,12 +1,12 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database.cjs'); // Ajuste o caminho conforme sua configuração
+const sequelize = require('../config/database'); 
 
 const User = sequelize.define('User', {
   idusuarios: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
-    field: 'idusuarios' // Nome da coluna no banco de dados
+    field: 'idusuarios' 
   },
   firstname: {
     type: DataTypes.STRING(300),

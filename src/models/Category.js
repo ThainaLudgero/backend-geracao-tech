@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database.cjs'); // Ajuste o caminho conforme sua configuração
+const sequelize = require('../config/database'); // Ajuste o caminho conforme sua configuração
 
 const Category = sequelize.define('Category', {
     id: {
