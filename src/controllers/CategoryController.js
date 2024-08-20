@@ -62,30 +62,76 @@ const getCategoryById = async (req, res) => {
 };
 
 const createCategory = async (req, res) => {
-    try {
-      const { name, slug, use_in_menu } = req.body;
-  
-      // Check if the required fields are present
-      if (!name || !slug || use_in_menu === undefined) {
-        return res.status(400).json({ error: 'All fields are required' });
-      }
-  
-      // Create a new category
-      const newCategory = await Category.create({
-        name,
-        slug,
-        use_in_menu,
-      });
-  
-      return res.status(201).json(newCategory);
-    } catch (error) {
-      console.error('Error creating category:', error);
-      return res.status(500).json({ error: 'An error occurred', details: error.message });
+  try {
+    const { name, slug, use_in_menu } = req.body;
+
+    // Verificação dos campos obrigatórios
+    if (!name || !slug || typeof use_in_menu !== 'boolean') {
+      return res.status(400).json({ message: 'Dados inválidos. Certifique-se de que todos os campos foram preenchidos corretamente.' });
     }
-  };
+
+    // Criação da nova categoria
+    const newCategory = await Category.create({ name, slug, use_in_menu });
+
+    return res.status(201).json({ message: 'Categoria criada com sucesso.', category: newCategory });
+  } catch (error) {
+    console.error('Erro ao criar categoria:', error);
+    return res.status(500).json({ message: 'Erro interno do servidor', details: error.message });
+  }
+};
+
+const updateCategory = async (req, res) => {
+  const { id } = req.params;
+  const { name, slug, use_in_menu } = req.body;
+
+  try {
+      // Verificação dos campos obrigatórios
+      if (!name || !slug || typeof use_in_menu !== 'boolean') {
+          return res.status(400).json({ message: 'Dados inválidos. Certifique-se de que todos os campos foram preenchidos corretamente.' });
+      }
+
+      // Busca a categoria pelo ID
+      const category = await Category.findByPk(id);
+      if (!category) {
+          return res.status(404).json({ message: 'Categoria não encontrada' });
+      }
+
+      // Atualiza a categoria
+      await category.update({ name, slug, use_in_menu });
+
+      // Retorna 204 No Content indicando sucesso
+      return res.status(204).send();
+  } catch (error) {
+      console.error('Erro ao atualizar categoria:', error);
+      return res.status(500).json({ message: 'Erro interno do servidor', details: error.message });
+  }
+};
+
+const deleteCategory = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Verifica se a categoria existe
+    const category = await Category.findByPk(id);
+    if (!category) {
+      return res.status(404).json({ message: 'Categoria não encontrada' });
+    }
+
+    // Deleta a categoria
+    await category.destroy();
+
+    // Retorna 204 No Content indicando sucesso
+    return res.status(204).send();
+  } catch (error) {
+    console.error('Erro ao deletar categoria:', error);
+    return res.status(500).json({ message: 'Erro interno do servidor', details: error.message });
+  }
+};
 
 module.exports = {
     getCategories, 
     getCategoryById, 
-    createCategory
+    createCategory,
+    updateCategory,
+    deleteCategory
 };

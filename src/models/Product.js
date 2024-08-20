@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database.cjs'); // Ajuste o caminho conforme sua configuração
+const sequelize = require('../config/database.cjs');
 
 const Product = sequelize.define('Product', {
     id: {
@@ -10,7 +10,7 @@ const Product = sequelize.define('Product', {
     },
     enabled: {
         type: DataTypes.BOOLEAN,
-        defaultValue: '0',
+        defaultValue: 0,
         field: 'enabled'
     },
     name: {
@@ -30,7 +30,7 @@ const Product = sequelize.define('Product', {
     },
     stock: {
         type: DataTypes.INTEGER,
-        defaultValue: '0', 
+        defaultValue: 0, 
         field: 'stock'
     },
     description: {
